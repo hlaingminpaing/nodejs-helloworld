@@ -118,5 +118,4 @@ artifacts:
   base-directory: .  # Current directory (root of CodeBuild environment)
   discard-paths: yes
   s3:
-    bucket: awscicddemohmp
-    path: cawscicddemohmp/todo-app  # Directory inside your S3 bucket
+    bucket: nodejs-helloworld/helloworld  # Directory inside your S3 bucket
