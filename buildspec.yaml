@@ -2,14 +2,15 @@ version: 0.2
 env:
   variables:
     AWS_ACCOUNT_ID: "965080479351"
-    AWS_DEFAULT_REGION: "ap-southeast-1"
+    AWS_REGION: "ap-southeast-1"
     IMAGE_REPO_NAME: "nodejs-hello"
+
 
 phases:
   pre_build:
     commands:
       - echo Logging into Amazon ECR...
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - echo Building Docker image...
       - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION .
       - echo Tagging Docker image...
