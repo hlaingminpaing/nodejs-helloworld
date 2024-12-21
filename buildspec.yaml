@@ -161,13 +161,13 @@ phases:
 
       ####Update path#########
       # Get the latest task definition ARN dynamically
-      - echo Fetching the latest task definition ARN...
-      - LATEST_TASK_DEFINITION_ARN=$(aws ecs list-task-definitions --family-prefix $TASK_FAMILY --sort DESC --region $AWS_DEFAULT_REGION --query "taskDefinitionArns[0]" --output text)
-      - echo "Latest Task Definition ARN: $LATEST_TASK_DEFINITION_ARN"
+      # - echo Fetching the latest task definition ARN...
+      # - LATEST_TASK_DEFINITION_ARN=$(aws ecs list-task-definitions --family-prefix $TASK_FAMILY --sort DESC --region $AWS_DEFAULT_REGION --query "taskDefinitionArns[0]" --output text)
+      # - echo "Latest Task Definition ARN: $LATEST_TASK_DEFINITION_ARN"
 
-      # Update the ECS service with the latest task definition
-      - echo Updating the ECS service with the latest task definition...
-      - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $LATEST_TASK_DEFINITION_ARN --region $AWS_DEFAULT_REGION
+      # # Update the ECS service with the latest task definition
+      # - echo Updating the ECS service with the latest task definition...
+      # - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $LATEST_TASK_DEFINITION_ARN --region $AWS_DEFAULT_REGION
 
 artifacts:
   files:
