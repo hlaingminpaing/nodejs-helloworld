@@ -1,9 +1,9 @@
 version: 0.0
 resources:
   - ecs:
-      - my-ecs-cluster-name:
-          service: my-ecs-service-name
-          taskDefinition: ECS_TASK_DEFINITION
+      - my-cluster:
+          service: ecs-service
+          taskDefinition: ecs-task
 
 hooks:
   AfterInstall:
