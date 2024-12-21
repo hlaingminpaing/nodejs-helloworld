@@ -17,12 +17,12 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: arn:aws:ecs:ap-southeast-1:965080479351:task-definition/ecs-task:1
+        TaskDefinition: arn:aws:ecs:ap-southeast-1:965080479351:task-definition/ecs-task
         LoadBalancerInfo:
           ContainerName: nodejs-helloworld
           ContainerPort: 3000
 
-hooks:
-  AfterInstall:
-    - location: scripts/deploy.sh
-      timeout: 3600
+# hooks:
+#   AfterInstall:
+#     - location: scripts/deploy.sh
+#       timeout: 3600

@@ -27,7 +27,7 @@ phases:
   post_build:
     commands:
       - echo Uploading imagedefinitions.json to S3...
-      - aws s3 cp imagedefinitions.json s3://nodejs-helloworld-bucket/nodejs-helloworld/imagedefinitions.json  
+      - aws s3 cp imagedefinitions.json s3://nodejs-helloworld/imagedefinitions.json  
       - echo Build complete. Imagedefinitions file uploaded to S3.
 
 artifacts:
