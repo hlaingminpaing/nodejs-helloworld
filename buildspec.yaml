@@ -5,7 +5,8 @@ env:
     AWS_REGION: "ap-southeast-1"
     IMAGE_REPO_NAME: "nodejs-hello"
     ECR_REGISTRY: "965080479351.dkr.ecr.ap-southeast-1.amazonaws.com"
-
+    ECS_CLUSTER: "my-cluster"
+    SERVICE_NAME: "ecs-service"
 
 phases:
   pre_build:
@@ -23,7 +24,29 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
       - echo Writing image definitions file...
       - printf '[{"name":"app-container","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION > imagedefinitions.json
+      #############update###########
+      - echo Preparing task definition file...
+      - cp task-definition.json task-definition-temp.json
+      - sed -i "s|\$AWS_ACCOUNT_ID|$AWS_ACCOUNT_ID|g" task-definition-temp.json
+      - sed -i "s|\$AWS_REGION|$AWS_DEFAULT_REGION|g" task-definition-temp.json
+      - sed -i "s|\$IMAGE_REPO_NAME|$IMAGE_REPO_NAME|g" task-definition-temp.json
+      - sed -i "s|\$CODEBUILD_RESOLVED_SOURCE_VERSION|$CODEBUILD_RESOLVED_SOURCE_VERSION|g" task-definition-temp.json
+      # Output the contents for debugging
+      - echo "Contents of task-definition-temp.json:"
+      - cat task-definition-temp.json
+      - echo Registering ECS Task Definition...
+      - aws ecs register-task-definition --cli-input-json file://task-definition-temp.json
 
+       ####Update path#########
+      # Get the latest task definition ARN dynamically
+      - echo Fetching the latest task definition ARN...
+      - LATEST_TASK_DEFINITION_ARN=$(aws ecs list-task-definitions --family-prefix $TASK_FAMILY --sort DESC --region $AWS_REGION --query "taskDefinitionArns[0]" --output text)
+      - echo "Latest Task Definition ARN: $LATEST_TASK_DEFINITION_ARN"
+
+      # Update the ECS service with the latest task definition
+      - echo Updating the ECS service with the latest task definition...
+      - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $LATEST_TASK_DEFINITION_ARN --region $AWS_REGION
+      #########update###########
   post_build:
     commands:
       - echo Uploading imagedefinitions.json to S3...
@@ -33,3 +56,4 @@ phases:
 artifacts:
   files:
     - imagedefinitions.json
+    - task-definition-temp.json
