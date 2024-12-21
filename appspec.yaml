@@ -26,4 +26,3 @@ hooks:
   AfterInstall:
     - location: scripts/deploy.sh
       timeout: 3600
-      runas: root
