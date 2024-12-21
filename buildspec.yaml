@@ -161,14 +161,18 @@ phases:
 
       ####Update path#########
       # Get the latest task definition ARN dynamically
-      - echo Fetching the latest task definition ARN...
-      - LATEST_TASK_DEFINITION_ARN=$(aws ecs list-task-definitions --sort DESC --region "ap-southeast-1" --query "taskDefinitionArns[0]" --output text)
-      - echo "Latest Task Definition ARN: $LATEST_TASK_DEFINITION_ARN"
+      # - echo Fetching the latest task definition ARN...
+      # - LATEST_TASK_DEFINITION_ARN=$(aws ecs list-task-definitions --sort DESC --region "ap-southeast-1" --query "taskDefinitionArns[0]" --output text)
+      # - echo "Latest Task Definition ARN: $LATEST_TASK_DEFINITION_ARN"
 
-      # # Update the ECS service with the latest task definition
-      - echo Updating the ECS service with the latest task definition...
-      - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $LATEST_TASK_DEFINITION_ARN --region $AWS_DEFAULT_REGION
-
+      # # # Update the ECS service with the latest task definition
+      # - echo Updating the ECS service with the latest task definition...
+      # - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $LATEST_TASK_DEFINITION_ARN --region $AWS_DEFAULT_REGION
+      - echo Updating ECS Service with new task definition...
+      - NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition ecs-task  --query "taskDefinition.taskDefinitionArn" --output text)
+      - echo $NEW_TASK_DEF_ARN
+      - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN --force-new-deployment
+      
 artifacts:
   files:
     - imagedefinitions.json
