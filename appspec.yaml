@@ -1,9 +1,26 @@
+# version: 0.0
+# resources:
+#   - ecs:
+#       - my-cluster:
+#           service: ecs-service
+#           taskDefinition: ecs-task
+
+# hooks:
+#   AfterInstall:
+#     - location: scripts/deploy.sh
+#       timeout: 3600
+#       runas: root
+
+
 version: 0.0
-resources:
-  - ecs:
-      - my-cluster:
-          service: ecs-service
-          taskDefinition: ecs-task
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: arn:aws:ecs:ap-southeast-1:965080479351:task-definition/ecs-task:1
+        LoadBalancerInfo:
+          ContainerName: nodejs-helloworld
+          ContainerPort: 3000
 
 hooks:
   AfterInstall:
