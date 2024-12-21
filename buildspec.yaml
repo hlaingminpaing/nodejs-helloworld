@@ -172,14 +172,16 @@ phases:
       - NEW_TASK_DEF_ARN=$(aws ecs list-task-definitions --sort DESC --region $AWS_REGION --query "taskDefinitionArns[0]" --output text)
       # - NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition ecs-task  --query "taskDefinition.taskDefinitionArn" --output text)
       - echo $NEW_TASK_DEF_ARN
-      - aws s3 cp appspec.yaml s3://nodejs-helloworld/appspec.yaml
-      - aws s3 cp scripts s3://my-bucket/scripts/ --recursive
+      ###if you run with codedeploy manually you need to uncomment
+      # - aws s3 cp appspec.yaml s3://nodejs-helloworld/appspec.yaml
+      # - aws s3 cp scripts s3://my-bucket/scripts/ --recursive
       # - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN --force-new-deployment
       
 artifacts:
   files:
     - imagedefinitions.json
     - task-definition-temp.json
+    - appspec.yaml
 
   # Uploading artifacts to S3
   base-directory: .  # Current directory (root of CodeBuild environment)
