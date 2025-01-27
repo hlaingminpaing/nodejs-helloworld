@@ -125,7 +125,7 @@ env:
   variables:
     AWS_ACCOUNT_ID: "965080479351"
     AWS_DEFAULT_REGION: "ap-southeast-1"
-    IMAGE_REPO_NAME: "nodejs-hello"
+    IMAGE_REPO_NAME: "nodejs/helloworld"
     ECS_CLUSTER: "my-cluster"
     SERVICE_NAME: "ecs-service"
 
@@ -175,7 +175,7 @@ phases:
       ###if you run with codedeploy manually you need to uncomment
       # - aws s3 cp appspec.yaml s3://nodejs-helloworld/appspec.yaml
       # - aws s3 cp scripts s3://my-bucket/scripts/ --recursive
-      # - aws ecs update-service --cluster $ECS_CLUSTER --service $SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN --force-new-deployment
+
       
 artifacts:
   files:
